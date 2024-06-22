@@ -21,3 +21,13 @@ CantidadC int NOT NULL
 );
 
 select * from Componentes;
+select * from Usuer;
+
+create table imagenes(
+id INT primary key auto_increment,
+nombre VARCHAR(75),
+descripcion VARCHAR(100),
+imagen TEXT
+);
+
+select * from imagenes; 
