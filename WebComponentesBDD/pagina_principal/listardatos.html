@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/estilotabla.css">
+    <title>Tabla Componentes</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Solicitud de Componentes</a></li>
+            <li><a href="menumenu.html">Menu Principal</a></li>
+            <li><a href="imagenes.html">Imágenes</a></li> 
+        </ul>
+    </nav>
+    <h2>Componentes</h2>
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Componentes</title>
+    </head>
+    <body>
+        <h1>Lista de Componentes</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre:</th>
+                    <th>Marca</th>
+                    <th>Precio de venta</th>
+                    <th>Descripcion</th>
+                    <th>Stock</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="componentes-list"></tbody>
+        </table>
+    
+        <script>
+            // Función para cargar los componentes al cargar la página
+            window.onload = function () {
+                // Realizar una solicitud GET a la ruta /obtener_componentes
+                fetch('/obtener_componentes')
+                // Procesar la respuesta como JSON
+                .then(function(response) {
+                    return response.json();
+                })
+                // Cuando se obtienen los datos JSON
+                .then(function(data) {
+                    var componentesList = document.getElementById('componentes-list');
+                    data.forEach(function(componente) {
+                        // Crear una nueva fila de tabla
+                        var row = document.createElement('tr');
+                        // Establecer el contenido HTML de la fila con los datos del componente
+                        row.innerHTML = '<td>' + componente.NombreC + '</td>' +
+                                        '<td>' + componente.MarcaC + '</td>' +
+                                        '<td>' + componente.PrecioC + '</td>' +
+                                        '<td>' + componente.DescripcionC + '</td>' +
+                                        '<td>' + componente.CantidadC + '</td>' +
+                                        '<td>' +
+                                            '<button onclick="eliminarComponente(' + componente.id + ')">Eliminar</button>' +
+                                            '<button onclick="modificarComponente(' + componente.id + ')">Modificar</button>' +
+                                        '</td>';
+                        // Agregar la fila a la lista de componentes
+                        componentesList.appendChild(row);
+                    });
+                });
+            };
+    
+            // Función para eliminar un componente
+            function eliminarComponente(id) {
+                if (confirm('¿Estás seguro de que deseas eliminar este componente?')) {
+                    fetch('/eliminar_componente/' + id, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Componente eliminado correctamente');
+                            location.reload(); // Recargar la página para actualizar la lista
+                        } else {
+                            alert('Error al eliminar el componente');
+                        }
+                    });
+                }
+            }
+    
+            // Función para modificar un componente (aquí puedes definir tu lógica de modificación)
+            function modificarComponente(id) {
+                window.location.href = '/modificar_componente.html?id=' + id;
+            }
+        </script>
+</body>
+</html>

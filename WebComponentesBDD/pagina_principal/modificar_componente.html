@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Metadatos del documento -->
+    <meta charset="UTF-8"> <!-- Define la codificación de caracteres como UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/estiloformulario.css"> <!-- Vincula el archivo de estilos CSS externo para estilizar el formulario -->
+    <title>Modificar Película</title> 
+</head>
+<body>
+    <h2>Modificar Componente</h2> <!-- Encabezado principal de la página -->
+    <form id="modificar-form" action="/modificar_componente" method="POST"> <!-- Formulario para modificar un componente, que envía los datos mediante el método POST a la ruta /modificar_componente -->
+        <input type="hidden" id="componente-id" name="id"> <!-- Campo oculto para almacenar el ID del componente -->
+        <div>
+            <label for="nombre">Nombre:</label> <!-- Etiqueta para el campo de nombre -->
+            <input type="text" id="nombre" name="NombreC" required> <!-- Campo de entrada de texto para el nombre del componente, obligatorio -->
+        </div>
+        <div>
+            <label for="marca">Marca:</label> <!-- Etiqueta para el campo de marca -->
+            <input type="text" id="marca" name="MarcaC" required> <!-- Campo de entrada de texto para la marca del componente, obligatorio -->
+        </div>
+        <div>
+            <label for="precio">Precio:</label> <!-- Etiqueta para el campo de precio -->
+            <input type="number" id="precio" name="PrecioC" required> <!-- Campo de entrada numérica para el precio del componente, obligatorio -->
+        </div>
+        <div>
+            <label for="descripcion">Descripción:</label> <!-- Etiqueta para el campo de descripción -->
+            <input type="text" id="descripcion" name="DescripcionC" required> <!-- Campo de entrada de texto para la descripción del componente, obligatorio -->
+        </div>
+        <div>
+            <label for="cantidad">Cantidad:</label> <!-- Etiqueta para el campo de cantidad -->
+            <input type="number" id="cantidad" name="CantidadC" required> <!-- Campo de entrada numérica para la cantidad del componente, obligatorio -->
+        </div>
+        <button type="submit">Guardar Cambios</button> <!-- Botón para enviar el formulario -->
+    </form>
+
+    <script>
+        // Obtener el ID del componente de la URL
+        const urlParams = new URLSearchParams(window.location.search); // Crea un objeto URLSearchParams para trabajar con los parámetros de la URL
+        const componenteId = urlParams.get('id'); // Obtiene el valor del parámetro 'id' de la URL
+        // Obtener el formulario y los campos
+        const modificarForm = document.getElementById('modificar-form'); // Obtiene el formulario por su ID
+        const idInput = document.getElementById('componente-id'); // Obtiene el campo oculto de ID
+        const nombreInput = document.getElementById('nombre'); // Obtiene el campo de nombre
+        const marcaInput = document.getElementById('marca'); // Obtiene el campo de marca
+        const precioInput = document.getElementById('precio'); // Obtiene el campo de precio
+        const descripcionInput = document.getElementById('descripcion'); // Obtiene el campo de descripción
+        const cantidadInput = document.getElementById('cantidad'); // Obtiene el campo de cantidad
+
+        // Rellenar el formulario con los datos del componente correspondiente
+        fetch('/obtener_componente/' + componenteId) // Realiza una solicitud para obtener los datos del componente con el ID especificado
+            .then(response => response.json()) // Convierte la respuesta en un objeto JSON
+            .then(componente => {
+                // Asigna los datos obtenidos a los campos del formulario
+                idInput.value = componente.id;
+                nombreInput.value = componente.NombreC;
+                marcaInput.value = componente.MarcaC;
+                precioInput.value = componente.PrecioC;
+                descripcionInput.value = componente.DescripcionC;
+                cantidadInput.value = componente.CantidadC;
+            })
+            .catch(error => console.error('Error al obtener los datos del componente:', error)); // Muestra un error en la consola si la solicitud falla
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estiloformulario.css">
+    <title>Componentes</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="menumenu.html">Menu Principal</a></li>
+            <li><a href="listardatos.html">Lista de Componentes</a></li>
+            <li><a href="zzimag.html">Imágenes</a></li> 
+        </ul>
+    </nav>
+    
+    <h2>Formulario Componentes Solicitados</h2>
+
+    <form id="formulario-Componentes" action="/guardar_componentes" method="post">
+        <div>
+            <label for="NombreC">Nombre del componente:</label>
+            <input type="text" id="NombreC" name="NombreC" pattern="[A-Za-z0-9\s]+" required>
+        </div>
+        <div>
+            <label for="MarcaC">Marca del Componente</label>
+            <input type="text" id="MarcaC" name="MarcaC" pattern="[A-Za-z0-9\s]+" required>
+        </div>
+        <div>
+            <label for="PrecioC">Precio del Producto:</label>
+            <input type="number" id="PrecioC" name="PrecioC" required>
+        </div>
+        <div>
+            <label for="DescripcionC">Descripcion del Producto:</label>
+            <input type="text" id="DescripcionC" name="DescripcionC" pattern="[A-Za-z0-9\s]+" required>
+        </div>
+        <div>
+            <label for="CantidadC">Cantidad del Producto:</label>
+            <input type="number" id="CantidadC" name="CantidadC" required>
+        </div>
+        <input type="submit" value="Enviar">
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+CREATE DATABASE CompV;
+use CompV;
+
+
+create table Usuer (
+id int primary key auto_increment,
+Nombre VARCHAR(50) NOT NULL,
+Apellido VARCHAR(50) NOT NULL,
+Correo VARCHAR(75) NOT NULL,
+Contraseña VARCHAR(75) NOT NULL,
+CHECK (Correo REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+);
+
+create table Componentes (
+id int primary key auto_increment,
+NombreC VARCHAR(75) NOT NULL,
+MarcaC VARCHAR(100) NOT NULL,
+PrecioC int NOT NULL,
+DescripcionC VARCHAR(100) NOT NULL,
+CantidadC int NOT NULL
+);
+
+select * from Componentes;

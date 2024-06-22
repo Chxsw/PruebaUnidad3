@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estilotabla.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Tabla Usuarios</title>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="menumenu.html">Menu Principal</a></li>
+            <li><a href="amenu.html">Formulario de Usuarios</a></li>
+        </ul>
+    </nav>
+
+    <h1>Lista de Usuarios</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="usuarios-list"></tbody>
+    </table>
+
+    <!-- Modal de Eliminar -->
+    <div class="modal fade" id="eliminarModal" tabindex="-1" aria-labelledby="eliminarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eliminarModalLabel">Eliminar Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este usuario?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmarEliminar">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalles -->
+    <div class="modal fade" id="detallesModal" tabindex="-1" aria-labelledby="detallesModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detallesModalLabel">Detalles del Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="detallesUsuario">
+                    <!-- Aquí se mostrarán los detalles del usuario -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let idUsuarioEliminar;
+
+        // Función para cargar los usuarios al cargar la página
+        window.onload = function () {
+            fetch('/obtener_usuarios')
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                var usuariosList = document.getElementById('usuarios-list');
+                data.forEach(function(usuario) {
+                    var row = document.createElement('tr');
+                    row.innerHTML = '<td>' + usuario.Nombre + '</td>' +
+                                    '<td>' + usuario.Apellido + '</td>' +
+                                    '<td>' + usuario.Correo + '</td>' +
+                                    '<td>' +
+                                        '<button class="btn btn-info" onclick="mostrarDetalles(' + usuario.id + ')">Detalles</button>' +
+                                        '<button class="btn btn-warning" onclick="modificarUsuario(' + usuario.id + ')">Modificar</button>' +
+                                        '<button class="btn btn-danger" onclick="mostrarModalEliminar(' + usuario.id + ')">Eliminar</button>' +
+                                    '</td>';
+                    usuariosList.appendChild(row);
+                });
+            });
+        };
+
+        // Función para mostrar el modal de eliminación
+        function mostrarModalEliminar(id) {
+            idUsuarioEliminar = id;
+            $('#eliminarModal').modal('show');
+        }
+
+        // Confirmar eliminación
+        document.getElementById('confirmarEliminar').addEventListener('click', function () {
+            fetch('/eliminar_usuario/' + idUsuarioEliminar, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Usuario eliminado correctamente');
+                    location.reload(); 
+                } else {
+                    alert('Error al eliminar el usuario');
+                }
+            });
+        });
+
+        // Función para mostrar los detalles del usuario
+        function mostrarDetalles(id) {
+            fetch('/obtener_usuario/' + id)
+            .then(response => response.json())
+            .then(data => {
+                var detallesUsuario = document.getElementById('detallesUsuario');
+                detallesUsuario.innerHTML = '<p><strong>Nombre:</strong> ' + data.Nombre + '</p>' +
+                                            '<p><strong>Apellido:</strong> ' + data.Apellido + '</p>' +
+                                            '<p><strong>Correo:</strong> ' + data.Correo + '</p>';
+                $('#detallesModal').modal('show');
+            });
+        }
+
+        // Función para modificar un usuario
+        function modificarUsuario(id) {
+            window.location.href = '/modificar_usuario.html?id=' + id;
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

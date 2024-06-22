@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/estiloformulario.css">
+    <title>Modificar Usuario</title>
+</head>
+<body>
+    <h2>Modificar Usuario</h2> <!-- Encabezado principal de la página -->
+    <form id="modificar-form" action="/modificar_usuario" method="POST"> <!-- Formulario para modificar un usuario, que envía los datos mediante el método POST a la ruta /modificar_usuario -->
+        <input type="hidden" id="usuario-id" name="id"> <!-- Campo oculto para almacenar el ID del usuario -->
+        <div>
+            <label for="nombre">Nombre:</label> <!-- Etiqueta para el campo de nombre -->
+            <input type="text" id="nombre" name="Nombre" required> <!-- Campo de entrada de texto para el nombre del usuario, obligatorio -->
+        </div>
+        <div>
+            <label for="apellido">Apellido:</label> <!-- Etiqueta para el campo de apellido -->
+            <input type="text" id="apellido" name="Apellido" required> <!-- Campo de entrada de texto para el apellido del usuario, obligatorio -->
+        </div>
+        <div>
+            <label for="correo">Correo:</label> <!-- Etiqueta para el campo de correo -->
+            <input type="email" id="correo" name="Correo" required> <!-- Campo de entrada de texto para el correo del usuario, obligatorio -->
+        </div>
+        <div>
+            <label for="contrasena">Contraseña:</label> <!-- Etiqueta para el campo de contraseña -->
+            <input type="password" id="contrasena" name="Contraseña" required> <!-- Campo de entrada de texto para la contraseña del usuario, obligatorio -->
+        </div>
+        <button type="submit">Guardar Cambios</button> <!-- Botón para enviar el formulario -->
+    </form>
+
+    <script>
+        // Obtener el ID del usuario de la URL
+        const urlParams = new URLSearchParams(window.location.search); // Crea un objeto URLSearchParams para trabajar con los parámetros de la URL
+        const usuarioId = urlParams.get('id'); // Obtiene el valor del parámetro 'id' de la URL
+        // Obtener el formulario y los campos
+        const modificarForm = document.getElementById('modificar-form'); // Obtiene el formulario por su ID
+        const idInput = document.getElementById('usuario-id'); // Obtiene el campo oculto de ID
+        const nombreInput = document.getElementById('nombre'); // Obtiene el campo de nombre
+        const apellidoInput = document.getElementById('apellido'); // Obtiene el campo de apellido
+        const correoInput = document.getElementById('correo'); // Obtiene el campo de correo
+        const contrasenaInput = document.getElementById('contrasena'); // Obtiene el campo de contraseña
+
+        // Rellenar el formulario con los datos del usuario correspondiente
+        fetch('/obtener_usuario/' + usuarioId) // Realiza una solicitud para obtener los datos del usuario con el ID especificado
+            .then(response => response.json()) // Convierte la respuesta en un objeto JSON
+            .then(usuario => {
+                // Asigna los datos obtenidos a los campos del formulario
+                idInput.value = usuario.id;
+                nombreInput.value = usuario.Nombre;
+                apellidoInput.value = usuario.Apellido;
+                correoInput.value = usuario.Correo;
+                contrasenaInput.value = usuario.Contraseña;
+            })
+            .catch(error => console.error('Error al obtener los datos del usuario:', error)); // Muestra un error en la consola si la solicitud falla
+    </script>
+    
+</body>
+</html>
